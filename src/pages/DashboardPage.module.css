@@ -1,0 +1,31 @@
+.page {
+  min-height: 100vh;
+  background: #f3f4f6;
+}
+
+.main {
+  max-width: 42rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.status {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  padding: 1rem 0;
+}
+
+.error {
+  text-align: center;
+  color: #ef4444;
+  font-size: 0.875rem;
+  padding: 1rem 0;
+}
