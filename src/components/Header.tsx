@@ -7,7 +7,7 @@ function Header() {
 
   return (
     <header className={styles.header}>
-      <h1 className={styles.title}>PoC - Vitest</h1>
+      <h1 className={styles.title}>Test Frameworks</h1>
       <div className={styles.userArea}>
         <span className={styles.userName}>{user?.name}</span>
         <Button variant="secondary" onClick={logout}>
