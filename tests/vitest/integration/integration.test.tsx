@@ -7,7 +7,7 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
 
-function renderApp() {
+function renderAppWithRouter() {
   return render(
     <MemoryRouter initialEntries={['/login']}>
       <AuthProvider>
@@ -28,31 +28,49 @@ function renderApp() {
   )
 }
 
-describe('Flujo completo de integración', () => {
-  it('login, crear tarea, completar tarea y eliminar tarea', async () => {
+describe('Application Integration', () => {
+  it('debería completar el flujo completo de autenticación y gestión de tareas', async () => {
+    // Arrange
     const user = userEvent.setup()
-    renderApp()
+    renderAppWithRouter()
 
-    await user.type(screen.getByLabelText('Email'), 'test@example.com')
-    await user.type(screen.getByLabelText('Contraseña'), 'password123')
-    await user.click(screen.getByText('Ingresar'))
+    // Act — Login
+    const emailInput = screen.getByLabelText('Email')
+    const passwordInput = screen.getByLabelText('Contraseña')
+    const loginButton = screen.getByText('Ingresar')
+    await user.type(emailInput, 'test@example.com')
+    await user.type(passwordInput, 'password123')
+    await user.click(loginButton)
 
-    expect(await screen.findByText('Mis tareas')).toBeInTheDocument()
+    // Assert — Redirección al dashboard
+    const sectionTitle = await screen.findByText('Mis tareas')
+    expect(sectionTitle).toBeInTheDocument()
 
-    const input = screen.getByPlaceholderText('Nueva tarea...')
-    await user.type(input, 'Tarea de integración')
-    await user.click(screen.getByText('Agregar'))
-    expect(await screen.findByText('Tarea de integración')).toBeInTheDocument()
+    // Act — Crear tarea
+    const taskInput = screen.getByPlaceholderText('Nueva tarea...')
+    const addButton = screen.getByText('Agregar')
+    await user.type(taskInput, 'Tarea de integración')
+    await user.click(addButton)
 
-    const checkboxes = screen.getAllByRole('checkbox')
-    await user.click(checkboxes[0])
+    // Assert — Tarea creada
+    const createdTask = await screen.findByText('Tarea de integración')
+    expect(createdTask).toBeInTheDocument()
+
+    // Act — Marcar como completada
+    const taskCheckboxes = screen.getAllByRole('checkbox')
+    await user.click(taskCheckboxes[0])
+
+    // Assert — Tarea completada
     await waitFor(() => {
       const updatedCheckboxes = screen.getAllByRole('checkbox')
       expect(updatedCheckboxes[0]).toBeChecked()
     })
 
+    // Act — Eliminar tarea
     const deleteButtons = screen.getAllByText('Eliminar')
     await user.click(deleteButtons[0])
+
+    // Assert — Tarea eliminada
     await waitFor(() => {
       expect(screen.queryByText('Tarea de integración')).not.toBeInTheDocument()
     })
