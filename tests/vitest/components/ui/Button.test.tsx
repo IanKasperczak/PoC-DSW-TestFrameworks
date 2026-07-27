@@ -1,44 +1,33 @@
-import { describe, it, expect, vi } from 'vitest'
+/**
+ * Pruebas unitarias del componente Button.
+ * Verifica renderizado, interacción con clics y la propiedad disabled.
+ */
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Button from '@/components/ui/Button'
 
-describe('Button Component', () => {
-  it('debería renderizar el texto pasado como children', () => {
-    // Arrange
-    const buttonText = 'Click me'
+describe('Button', () => {
+  it('renderiza el contenido recibido', () => {
+    render(<Button>Click me</Button>)
 
-    // Act
-    render(<Button>{buttonText}</Button>)
-
-    // Assert
-    const button = screen.getByText(buttonText)
+    const button = screen.getByText('Click me')
     expect(button).toBeInTheDocument()
   })
 
-  it('debería ejecutar la función onClick cuando el usuario hace clic', async () => {
-    // Arrange
-    const handleClick = vi.fn()
+  it('invoca el manejador de click una sola vez', async () => {
+    const onClick = vi.fn()
     const user = userEvent.setup()
 
-    // Act
-    render(<Button onClick={handleClick}>Click me</Button>)
-    const button = screen.getByText('Click me')
-    await user.click(button)
+    render(<Button onClick={onClick}>Click me</Button>)
+    await user.click(screen.getByText('Click me'))
 
-    // Assert
-    expect(handleClick).toHaveBeenCalledTimes(1)
+    expect(onClick).toHaveBeenCalledTimes(1)
   })
 
-  it('debería respetar la propiedad disabled', () => {
-    // Arrange
-    const buttonText = 'Inactivo'
+  it('queda deshabilitado cuando se pasa la propiedad disabled', () => {
+    render(<Button disabled>Inactivo</Button>)
 
-    // Act
-    render(<Button disabled>{buttonText}</Button>)
-
-    // Assert
-    const button = screen.getByText(buttonText)
+    const button = screen.getByText('Inactivo')
     expect(button).toBeDisabled()
   })
 })

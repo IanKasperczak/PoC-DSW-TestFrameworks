@@ -1,4 +1,8 @@
-import { describe, it, expect } from 'vitest'
+/**
+ * Pruebas de la página de inicio de sesión.
+ * Verifica la validación de campos vacíos y la redirección tras
+ * autenticarse correctamente.
+ */
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Routes, Route, Navigate } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
@@ -28,38 +32,26 @@ function renderLoginPageWithRouter() {
   )
 }
 
-describe('Login Page', () => {
-  it('debería mostrar un error cuando los campos están vacíos', async () => {
-    // Arrange
+describe('LoginPage', () => {
+  it('valida que los campos no estén vacíos', async () => {
     const user = userEvent.setup()
     renderLoginPageWithRouter()
 
-    // Act
-    const loginButton = screen.getByText('Ingresar')
-    await user.click(loginButton)
+    await user.click(screen.getByText('Ingresar'))
 
-    // Assert
-    const errorMessage = screen.getByText('Todos los campos son obligatorios')
-    expect(errorMessage).toBeInTheDocument()
+    const error = screen.getByText('Todos los campos son obligatorios')
+    expect(error).toBeInTheDocument()
   })
 
-  it('debería iniciar sesión y redirigir al dashboard', async () => {
-    // Arrange
+  it('navega al panel tras autenticarse correctamente', async () => {
     const user = userEvent.setup()
-    const validEmail = 'test@example.com'
-    const validPassword = 'password123'
-
-    // Act
     renderLoginPageWithRouter()
-    const emailInput = screen.getByLabelText('Email')
-    const passwordInput = screen.getByLabelText('Contraseña')
-    await user.type(emailInput, validEmail)
-    await user.type(passwordInput, validPassword)
-    const submitButton = screen.getByText('Ingresar')
-    await user.click(submitButton)
 
-    // Assert
-    const dashboardTitle = await screen.findByText('Mis tareas')
-    expect(dashboardTitle).toBeInTheDocument()
+    await user.type(screen.getByLabelText('Email'), 'test@example.com')
+    await user.type(screen.getByLabelText('Contraseña'), 'password123')
+    await user.click(screen.getByText('Ingresar'))
+
+    const title = await screen.findByText('Mis tareas')
+    expect(title).toBeInTheDocument()
   })
 })

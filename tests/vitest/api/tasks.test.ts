@@ -1,33 +1,29 @@
-import { describe, it, expect } from 'vitest'
+/**
+ * Pruebas unitarias de la capa de tareas contra la red simulada con MSW.
+ * Verifica el listado, el manejo de errores de autorización y la creación
+ * de nuevas tareas.
+ */
 import * as tasksApi from '@/api/tasks'
 
-const VALID_TOKEN = 'mock-token'
+const TOKEN = 'mock-token'
 
-describe('Tasks API', () => {
-  it('debería obtener correctamente la lista de tareas desde la API', async () => {
-    // Act
-    const tasks = await tasksApi.getTasks(VALID_TOKEN)
+describe('api/tasks', () => {
+  it('lista las tareas existentes', async () => {
+    const tasks = await tasksApi.getTasks(TOKEN)
 
-    // Assert
     expect(tasks).toHaveLength(2)
     expect(tasks[0].title).toBe('Aprender Vitest')
   })
 
-  it('debería manejar correctamente un error al obtener las tareas', async () => {
-    // Act & Assert
-    await expect(tasksApi.getTasks('invalid')).rejects.toThrow('Error al obtener tareas')
+  it('rechaza el listado sin autorización', async () => {
+    await expect(tasksApi.getTasks('token-falso')).rejects.toThrow('Error al obtener tareas')
   })
 
-  it('debería crear una nueva tarea correctamente', async () => {
-    // Arrange
-    const newTaskTitle = 'Nueva tarea'
+  it('crea una tarea y la devuelve sin completar', async () => {
+    const task = await tasksApi.createTask(TOKEN, 'Nueva tarea')
 
-    // Act
-    const createdTask = await tasksApi.createTask(VALID_TOKEN, newTaskTitle)
-
-    // Assert
-    expect(createdTask.title).toBe(newTaskTitle)
-    expect(createdTask.completed).toBe(false)
-    expect(createdTask).toHaveProperty('id')
+    expect(task.title).toBe('Nueva tarea')
+    expect(task.completed).toBe(false)
+    expect(task).toHaveProperty('id')
   })
 })

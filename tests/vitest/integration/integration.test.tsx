@@ -1,4 +1,8 @@
-import { describe, it, expect } from 'vitest'
+/**
+ * Prueba de integración del recorrido completo: iniciar sesión, crear una
+ * tarea, marcarla como completada y eliminarla. Atraviesa páginas, contexto
+ * y capa de API contra la red simulada con MSW.
+ */
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Routes, Route, Navigate } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
@@ -28,49 +32,34 @@ function renderAppWithRouter() {
   )
 }
 
-describe('Application Integration', () => {
-  it('debería completar el flujo completo de autenticación y gestión de tareas', async () => {
-    // Arrange
+async function iniciarSesion(user: ReturnType<typeof userEvent.setup>) {
+  await user.type(screen.getByLabelText('Email'), 'test@example.com')
+  await user.type(screen.getByLabelText('Contraseña'), 'password123')
+  await user.click(screen.getByText('Ingresar'))
+  await waitFor(() => expect(screen.getByText('Mis tareas')).toBeInTheDocument())
+}
+
+describe('Recorrido completo del panel de tareas', () => {
+  it('completa el flujo de autenticación, creación, marcado y eliminación', async () => {
     const user = userEvent.setup()
     renderAppWithRouter()
 
-    // Act — Login
-    const emailInput = screen.getByLabelText('Email')
-    const passwordInput = screen.getByLabelText('Contraseña')
-    const loginButton = screen.getByText('Ingresar')
-    await user.type(emailInput, 'test@example.com')
-    await user.type(passwordInput, 'password123')
-    await user.click(loginButton)
+    await iniciarSesion(user)
 
-    // Assert — Redirección al dashboard
-    const sectionTitle = await screen.findByText('Mis tareas')
-    expect(sectionTitle).toBeInTheDocument()
+    const input = screen.getByPlaceholderText('Nueva tarea...')
+    await user.type(input, 'Tarea de integración')
+    await user.click(screen.getByText('Agregar'))
+    await waitFor(() => expect(screen.getByText('Tarea de integración')).toBeInTheDocument())
 
-    // Act — Crear tarea
-    const taskInput = screen.getByPlaceholderText('Nueva tarea...')
-    const addButton = screen.getByText('Agregar')
-    await user.type(taskInput, 'Tarea de integración')
-    await user.click(addButton)
-
-    // Assert — Tarea creada
-    const createdTask = await screen.findByText('Tarea de integración')
-    expect(createdTask).toBeInTheDocument()
-
-    // Act — Marcar como completada
-    const taskCheckboxes = screen.getAllByRole('checkbox')
-    await user.click(taskCheckboxes[0])
-
-    // Assert — Tarea completada
+    const checkboxes = screen.getAllByRole('checkbox')
+    await user.click(checkboxes[0])
     await waitFor(() => {
-      const updatedCheckboxes = screen.getAllByRole('checkbox')
-      expect(updatedCheckboxes[0]).toBeChecked()
+      const updated = screen.getAllByRole('checkbox')
+      expect(updated[0]).toBeChecked()
     })
 
-    // Act — Eliminar tarea
     const deleteButtons = screen.getAllByText('Eliminar')
     await user.click(deleteButtons[0])
-
-    // Assert — Tarea eliminada
     await waitFor(() => {
       expect(screen.queryByText('Tarea de integración')).not.toBeInTheDocument()
     })

@@ -1,30 +1,27 @@
-import { describe, it, expect } from 'vitest'
+/**
+ * Pruebas de la página del panel de tareas.
+ * Verifica que los elementos principales se rendericen y que el nombre
+ * del usuario autenticado se muestre en la cabecera.
+ */
 import { screen } from '@testing-library/react'
 import { renderWithProviders } from '../test-utils'
 import DashboardPage from '@/pages/DashboardPage'
 
-describe('Dashboard Page', () => {
-  it('debería mostrar el título de la aplicación y la sección de tareas', () => {
-    // Act
+describe('DashboardPage', () => {
+  it('renderiza la cabecera y la sección de tareas', () => {
     renderWithProviders(<DashboardPage />, {
       initialEntries: ['/dashboard'],
     })
 
-    // Assert
-    const appTitle = screen.getByText('Test Frameworks')
-    const sectionTitle = screen.getByText('Mis tareas')
-    expect(appTitle).toBeInTheDocument()
-    expect(sectionTitle).toBeInTheDocument()
+    expect(screen.getByText('Test Frameworks')).toBeInTheDocument()
+    expect(screen.getByText('Mis tareas')).toBeInTheDocument()
   })
 
-  it('debería mostrar el usuario autenticado en el dashboard', () => {
-    // Act
+  it('muestra el nombre del usuario en la cabecera', () => {
     renderWithProviders(<DashboardPage />, {
       initialEntries: ['/dashboard'],
     })
 
-    // Assert
-    const userName = screen.getByText('Test')
-    expect(userName).toBeInTheDocument()
+    expect(screen.getByText('Test')).toBeInTheDocument()
   })
 })

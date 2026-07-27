@@ -1,37 +1,33 @@
-import { describe, it, expect, vi } from 'vitest'
+/**
+ * Pruebas unitarias del componente TaskForm.
+ * Verifica el envío de títulos válidos y la prevención de títulos vacíos.
+ */
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import TaskForm from '@/components/TaskForm'
 
-describe('TaskForm Component', () => {
-  it('debería agregar una nueva tarea al enviar un título válido', async () => {
-    // Arrange
-    const handleAdd = vi.fn()
+describe('TaskForm', () => {
+  it('notifica al manejador con el título ingresado', async () => {
+    const onAdd = vi.fn()
     const user = userEvent.setup()
-    render(<TaskForm onAdd={handleAdd} />)
-    const taskInput = screen.getByPlaceholderText('Nueva tarea...')
 
-    // Act
-    await user.type(taskInput, 'Comprar leche')
-    const addButton = screen.getByText('Agregar')
-    await user.click(addButton)
+    render(<TaskForm onAdd={onAdd} />)
+    const input = screen.getByPlaceholderText('Nueva tarea...')
+    await user.type(input, 'Comprar leche')
+    await user.click(screen.getByText('Agregar'))
 
-    // Assert
-    expect(handleAdd).toHaveBeenCalledWith('Comprar leche')
+    expect(onAdd).toHaveBeenCalledWith('Comprar leche')
   })
 
-  it('debería impedir agregar una tarea con el título vacío', async () => {
-    // Arrange
-    const handleAdd = vi.fn()
+  it('no envía el título cuando el campo contiene solo espacios', async () => {
+    const onAdd = vi.fn()
     const user = userEvent.setup()
-    render(<TaskForm onAdd={handleAdd} />)
-    const taskInput = screen.getByPlaceholderText('Nueva tarea...')
 
-    // Act
-    await user.type(taskInput, '   ')
+    render(<TaskForm onAdd={onAdd} />)
+    const input = screen.getByPlaceholderText('Nueva tarea...')
+    await user.type(input, '   ')
     await user.keyboard('{Enter}')
 
-    // Assert
-    expect(handleAdd).not.toHaveBeenCalled()
+    expect(onAdd).not.toHaveBeenCalled()
   })
 })

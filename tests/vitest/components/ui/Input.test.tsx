@@ -1,32 +1,26 @@
-import { describe, it, expect } from 'vitest'
+/**
+ * Pruebas unitarias del componente Input.
+ * Verifica la actualización del valor y la visualización del placeholder.
+ */
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Input from '@/components/ui/Input'
 
-describe('Input Component', () => {
-  it('debería actualizar su valor cuando el usuario escribe', async () => {
-    // Arrange
+describe('Input', () => {
+  it('actualiza el valor del campo cuando el usuario escribe', async () => {
     const user = userEvent.setup()
-    const expectedValue = 'test@example.com'
 
-    // Act
     render(<Input label="Email" />)
-    const emailInput = screen.getByLabelText('Email')
-    await user.type(emailInput, expectedValue)
+    const input = screen.getByLabelText('Email')
+    await user.type(input, 'test@example.com')
 
-    // Assert
-    expect(emailInput).toHaveValue(expectedValue)
+    expect(input).toHaveValue('test@example.com')
   })
 
-  it('debería mostrar el placeholder cuando se proporciona uno', () => {
-    // Arrange
-    const placeholderText = 'tu@email.com'
+  it('muestra el placeholder cuando se proporciona', () => {
+    render(<Input label="Email" placeholder="tu@email.com" />)
 
-    // Act
-    render(<Input label="Email" placeholder={placeholderText} />)
-
-    // Assert
-    const input = screen.getByPlaceholderText(placeholderText)
+    const input = screen.getByPlaceholderText('tu@email.com')
     expect(input).toBeInTheDocument()
   })
 })

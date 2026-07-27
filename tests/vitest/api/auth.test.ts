@@ -1,12 +1,11 @@
-import { describe, it, expect } from 'vitest'
+/**
+ * Pruebas de la capa de autenticación contra la red simulada con MSW.
+ * Verifica el manejo de errores con credenciales inválidas.
+ */
 import * as authApi from '@/api/auth'
 
-describe('Authentication API', () => {
-  it('debería lanzar un error cuando las credenciales son incorrectas', async () => {
-    // Arrange
-    const invalidCredentials = { email: '', password: '' }
-
-    // Act & Assert
-    await expect(authApi.login(invalidCredentials)).rejects.toThrow('Credenciales inválidas')
+describe('api/auth', () => {
+  it('lanza un error cuando faltan credenciales', async () => {
+    await expect(authApi.login({ email: '', password: '' })).rejects.toThrow('Credenciales inválidas')
   })
 })

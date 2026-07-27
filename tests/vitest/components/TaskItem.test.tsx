@@ -1,42 +1,38 @@
-import { describe, it, expect, vi } from 'vitest'
+/**
+ * Pruebas unitarias del componente TaskItem.
+ * Verifica que los botones de marcado y eliminación emitan los eventos
+ * esperados con el identificador de la tarea.
+ */
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import TaskItem from '@/components/TaskItem'
 import type { Task } from '@/types/task'
 
-const sampleTask: Task = {
+const TASK: Task = {
   id: '1',
   title: 'Tarea pendiente',
   completed: false,
   createdAt: '2024-01-01',
 }
 
-describe('TaskItem Component', () => {
-  it('debería marcar la tarea como completada cuando el usuario hace clic en el checkbox', async () => {
-    // Arrange
-    const handleToggle = vi.fn()
+describe('TaskItem', () => {
+  it('notifica el cambio de estado con el identificador de la tarea', async () => {
+    const onToggle = vi.fn()
     const user = userEvent.setup()
-    render(<TaskItem task={sampleTask} onToggle={handleToggle} onDelete={vi.fn()} />)
 
-    // Act
-    const checkbox = screen.getByRole('checkbox')
-    await user.click(checkbox)
+    render(<TaskItem task={TASK} onToggle={onToggle} onDelete={vi.fn()} />)
+    await user.click(screen.getByRole('checkbox'))
 
-    // Assert
-    expect(handleToggle).toHaveBeenCalledWith('1')
+    expect(onToggle).toHaveBeenCalledWith('1')
   })
 
-  it('debería eliminar la tarea cuando el usuario hace clic en Eliminar', async () => {
-    // Arrange
-    const handleDelete = vi.fn()
+  it('notifica la eliminación con el identificador de la tarea', async () => {
+    const onDelete = vi.fn()
     const user = userEvent.setup()
-    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={handleDelete} />)
 
-    // Act
-    const deleteButton = screen.getByText('Eliminar')
-    await user.click(deleteButton)
+    render(<TaskItem task={TASK} onToggle={vi.fn()} onDelete={onDelete} />)
+    await user.click(screen.getByText('Eliminar'))
 
-    // Assert
-    expect(handleDelete).toHaveBeenCalledWith('1')
+    expect(onDelete).toHaveBeenCalledWith('1')
   })
 })
