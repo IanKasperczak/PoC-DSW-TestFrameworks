@@ -153,12 +153,10 @@ npm run test:jest:watch
 ---
 
 ## Integrantes
-
-> _Completar con los nombres de los integrantes del grupo._
-
-- Apellido, Nombre
-- Apellido, Nombre
-- Apellido, Nombre
+Vitest:
+- Kasperczak, Ian
+- De Giovanni, Bianca
+- Cabardos, Matias
 
 ---
 
