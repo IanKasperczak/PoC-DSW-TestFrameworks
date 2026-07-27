@@ -154,9 +154,19 @@ npm run test:jest:watch
 
 ## Integrantes
 Vitest:
-- Kasperczak, Ian
 - De Giovanni, Bianca
 - Cabardos, Matias
+- Kasperczak, Ian
+  
+Jest:
+- Felicevich, Mirko
+- Linch, Baltasar
+- Ponzano, Benjamin
+  
+Mocha:
+-Astudilla, Santiago
+-Chocobar, Carlos
+-Tarantola, Federico
 
 ---
 
