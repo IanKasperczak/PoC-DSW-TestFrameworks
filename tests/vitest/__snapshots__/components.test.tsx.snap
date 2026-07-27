@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TaskList > coincide con la instantánea registrada 1`] = `
+<ul
+  class="_list_bb5050"
+>
+  <li
+    class="_item_6ff4e9 "
+  >
+    <label
+      class="_label_6ff4e9"
+    >
+      <input
+        class="_checkbox_6ff4e9"
+        type="checkbox"
+      />
+      <span
+        class="_title_6ff4e9"
+      >
+        Aprender Jest
+      </span>
+    </label>
+    <button
+      class="_button_947cf7 _danger_947cf7 "
+    >
+      Eliminar
+    </button>
+  </li>
+</ul>
+`;
