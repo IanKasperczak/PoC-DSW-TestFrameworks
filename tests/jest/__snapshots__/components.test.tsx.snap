@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`TaskList coincide con la instantánea registrada 1`] = `
+<ul
+  class="list"
+>
+  <li
+    class="item "
+  >
+    <label
+      class="label"
+    >
+      <input
+        class="checkbox"
+        type="checkbox"
+      />
+      <span
+        class="title"
+      >
+        Aprender Jest
+      </span>
+    </label>
+    <button
+      class="button danger "
+    >
+      Eliminar
+    </button>
+  </li>
+</ul>
+`;
