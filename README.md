@@ -10,7 +10,7 @@ Este repositorio forma parte del trabajo práctico de la asignatura **Desarrollo
 
 La aplicación es un sistema simple de inicio de sesión y gestión de tareas desarrollado en React + Vite + TypeScript. Su única finalidad es servir como banco de pruebas para implementar y comparar suites de test equivalentes en diferentes tecnologías.
 
-Actualmente el proyecto cuenta con implementaciones completas para **Vitest** y **Jest**, diseñadas para ser funcionalmente equivalentes y permitir una comparación académicamente válida entre ambos frameworks. La incorporación de **Mocha** queda planteada como trabajo futuro.
+Actualmente el proyecto cuenta con implementaciones completas para **Vitest** y **Jest**, diseñadas para ser funcionalmente equivalentes y permitir una comparación académicamente válida entre ambos frameworks. La incorporación de **Mocha** queda planteada aquí https://github.com/ChocobarCM/PoC-suite-test-Mocha/blob/main/README.md .
 
 ---
 
